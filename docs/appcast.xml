@@ -1,0 +1,8 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>Simple Editor Updates</title>
+        <link>https://makikub.github.io/simple-editor/</link>
+        <description>Simple Editor release feed.</description>
+    </channel>
+</rss>

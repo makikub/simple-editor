@@ -3,6 +3,7 @@ import SwiftUI
 @main
 struct SimpleEditorApp: App {
     @StateObject private var editor = EditorViewModel()
+    @StateObject private var updates = UpdateController()
 
     var body: some Scene {
         WindowGroup(BuildFlavor.windowTitle) {
@@ -11,6 +12,15 @@ struct SimpleEditorApp: App {
                 .frame(minWidth: 980, minHeight: 660)
         }
         .commands {
+            CommandGroup(after: .appInfo) {
+                Button("Check for Updates...") {
+                    if updates.isAvailable {
+                        updates.checkForUpdates()
+                    } else {
+                        editor.alertMessage = "Updates are available only in the packaged app with Sparkle feed settings."
+                    }
+                }
+            }
             CommandGroup(replacing: .newItem) {
                 Button("New") { editor.newDocument() }
                     .keyboardShortcut("n", modifiers: .command)

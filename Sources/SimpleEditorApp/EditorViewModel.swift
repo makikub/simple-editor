@@ -12,6 +12,7 @@ final class EditorViewModel: ObservableObject {
     @Published var replaceText = ""
     @Published var regexSearch = false
     @Published var selectedCSVColumn = "All"
+    @Published var csvFilterQuery = ""
     @Published var searchMatches: [SearchMatch] = []
     @Published var selectedMatchIndex = 0
     @Published var alertMessage: String?
@@ -161,7 +162,8 @@ final class EditorViewModel: ObservableObject {
     func rebuildCSV() {
         let delimiter = settings.csvAutoDetectDelimiter
             ? CSVParseService.detectDelimiter(text: file.text, url: file.url)
-            : (csvDocument?.delimiter ?? .comma)
+            : settings.csvDelimiter
+        settings.csvDelimiter = delimiter
         csvDocument = CSVParseService.parse(text: file.text, delimiter: delimiter, hasHeader: settings.csvHasHeaderDefault)
     }
 
@@ -193,6 +195,18 @@ final class EditorViewModel: ObservableObject {
         document.rows.remove(atOffsets: offsets)
         csvDocument = document
         file.isDirty = true
+    }
+
+    func deleteCSVRow(rowID: CSVRow.ID) {
+        guard var document = csvDocument,
+              let rowIndex = document.rows.firstIndex(where: { $0.id == rowID }) else { return }
+        document.rows.remove(at: rowIndex)
+        csvDocument = document
+        file.isDirty = true
+        if settings.crashRecovery {
+            CrashRecoveryService.saveDraft(CSVSerializeService.serialize(document, lineEnding: file.lineEndingInfo.primary))
+        }
+        refreshSearch()
     }
 
     func refreshSearch() {

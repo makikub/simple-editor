@@ -37,6 +37,33 @@ make build-debug
 make build-release
 ```
 
+## Distribution
+
+Sparkle is wired for app updates when the executable is packaged as a `.app`.
+
+1. Generate a Sparkle EdDSA key pair with Sparkle's `generate_keys` tool.
+2. Keep the private key outside the repository.
+3. Build the app bundle:
+
+```sh
+SPARKLE_PUBLIC_ED_KEY='public-key-from-generate-keys' make app-bundle
+```
+
+The default appcast URL is `https://makikub.github.io/simple-editor/appcast.xml`.
+Override it with `SPARKLE_FEED_URL` if GitHub Pages uses another URL.
+The generated app and zip are written to `.build/dist/`.
+
+To stage a GitHub Pages update feed under `docs/`:
+
+```sh
+SPARKLE_PUBLIC_ED_KEY='public-key-from-generate-keys' \
+SPARKLE_PRIVATE_ED_KEY_FILE='/path/to/ed25519_private_key' \
+make release-pages
+```
+
+This copies the release zip into `docs/releases/` and regenerates
+`docs/appcast.xml` with Sparkle's `generate_appcast` tool.
+
 ## MVP Scope
 
 Implemented:
@@ -54,9 +81,10 @@ Implemented:
 - Fixed-width ruler, guide display, byte/character length warning
 - Plain and regex search, plain replace in text mode
 - Status bar and crash-recovery draft
+- Sparkle update check hook for packaged app distribution
 
 Known MVP limitations:
 
 - CSV edited rows are reserialized on save; unedited rows keep their original row text when possible.
 - Fixed-width mode is a safety-oriented preview/check view, not a table editor.
-- This is a Swift Package executable app, not a signed `.app` distribution bundle yet.
+- Distribution signing/notarization still needs a Developer ID certificate before public release.

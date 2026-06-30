@@ -117,6 +117,7 @@ struct AppSettings {
     var wrapText: Bool = true
     var csvHasHeaderDefault: Bool = true
     var csvAutoDetectDelimiter: Bool = true
+    var csvDelimiter: CSVDelimiter = .comma
     var crashRecovery: Bool = true
     var fixedWidthGuides: String = "10,20,30,40,50,60,70,80"
 }

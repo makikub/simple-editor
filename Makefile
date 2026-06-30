@@ -1,4 +1,4 @@
-.PHONY: debug release build-debug build-release clean
+.PHONY: debug release build-debug build-release app-bundle release-pages clean
 
 debug:
 	swift run
@@ -11,6 +11,12 @@ build-debug:
 
 build-release:
 	swift build -c release
+
+app-bundle:
+	scripts/build_app_bundle.sh
+
+release-pages:
+	scripts/update_appcast.sh
 
 clean:
 	swift package clean
