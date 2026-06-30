@@ -13,7 +13,7 @@
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <sparkle:releaseNotesLink>https://makikub.github.io/simple-editor/releases/SimpleEditor-0.1.0.md</sparkle:releaseNotesLink>
-            <enclosure url="https://makikub.github.io/simple-editor/releases/SimpleEditor-0.1.0.zip" length="2897498" type="application/octet-stream" sparkle:edSignature="jEruLeROemVwHNsBKE/Q31Q1SCQUx3cg168uyfZ+cOcMub4uig3qCIEpK9STnrhp8lDAvB77MqDcXhvdE9nfAA=="/>
+            <enclosure url="https://makikub.github.io/simple-editor/releases/SimpleEditor-0.1.0.zip" length="2899384" type="application/octet-stream" sparkle:edSignature="GOlCNMIGjRPEybsnvHiBg9TTy+O8E55Butv7gjtQ/jOCfVSgvxs82tiJ6NtUDugc49VvfTTntD02xvDfWhNhDw=="/>
         </item>
     </channel>
 </rss>
