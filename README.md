@@ -57,6 +57,15 @@ swift scripts/generate_app_icon.swift
 SPARKLE_PUBLIC_ED_KEY='public-key-from-generate-keys' make app-bundle
 ```
 
+For Developer ID signing, pass the signing identity and hardened runtime option:
+
+```sh
+CODE_SIGN_IDENTITY='Developer ID Application: Example (TEAMID)' \
+CODE_SIGN_OPTIONS='--options runtime' \
+SPARKLE_PUBLIC_ED_KEY='public-key-from-generate-keys' \
+make app-bundle
+```
+
 The default appcast URL is `https://makikub.github.io/simple-editor/appcast.xml`.
 Override it with `SPARKLE_FEED_URL` if GitHub Pages uses another URL.
 The generated app and zip are written to `.build/dist/`.
@@ -95,4 +104,4 @@ Known MVP limitations:
 
 - CSV edited rows are reserialized on save; unedited rows keep their original row text when possible.
 - Fixed-width mode is a safety-oriented preview/check view, not a table editor.
-- Distribution signing/notarization still needs a Developer ID certificate before public release.
+- Public distribution still needs notarization after Developer ID signing.

@@ -8,6 +8,7 @@ APP_NAME="${APP_NAME:-Simple Editor}"
 APPCAST_URL="${SPARKLE_FEED_URL:-https://makikub.github.io/simple-editor/appcast.xml}"
 PUBLIC_KEY="${SPARKLE_PUBLIC_ED_KEY:-}"
 CONFIGURATION="${CONFIGURATION:-release}"
+CODE_SIGN_OPTIONS="${CODE_SIGN_OPTIONS:-}"
 
 if [[ -z "$PUBLIC_KEY" ]]; then
   echo "SPARKLE_PUBLIC_ED_KEY is required. Generate it with Sparkle's generate_keys tool." >&2
@@ -44,7 +45,16 @@ elif [[ -d "$ROOT_DIR/.build/artifacts/sparkle/Sparkle/Sparkle.xcframework/macos
   cp -R "$ROOT_DIR/.build/artifacts/sparkle/Sparkle/Sparkle.xcframework/macos-arm64_x86_64/Sparkle.framework" "$FRAMEWORKS_DIR/"
 fi
 
-codesign --force --deep --sign "${CODE_SIGN_IDENTITY:--}" "$APP_DIR"
+CODE_SIGN_ARGS=(--force --deep)
+if [[ -n "$CODE_SIGN_OPTIONS" ]]; then
+  # Split intentional option strings such as "--options runtime".
+  # shellcheck disable=SC2206
+  EXTRA_CODE_SIGN_ARGS=($CODE_SIGN_OPTIONS)
+  CODE_SIGN_ARGS+=("${EXTRA_CODE_SIGN_ARGS[@]}")
+fi
+CODE_SIGN_ARGS+=(--sign "${CODE_SIGN_IDENTITY:--}" "$APP_DIR")
+
+codesign "${CODE_SIGN_ARGS[@]}"
 
 ditto -c -k --keepParent "$APP_DIR" "$ROOT_DIR/.build/dist/SimpleEditor-$VERSION.zip"
 
