@@ -5,6 +5,17 @@
         <link>https://makikub.github.io/simple-editor/</link>
         <description>Simple Editor release feed.</description>
         <item>
+            <title>0.1.2</title>
+            <pubDate>Wed, 01 Jul 2026 08:57:21 +0900</pubDate>
+            <link>https://makikub.github.io/simple-editor/</link>
+            <sparkle:version>3</sparkle:version>
+            <sparkle:shortVersionString>0.1.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <sparkle:releaseNotesLink>https://makikub.github.io/simple-editor/releases/SimpleEditor-0.1.2.md</sparkle:releaseNotesLink>
+            <enclosure url="https://makikub.github.io/simple-editor/releases/SimpleEditor-0.1.2.zip" length="2834421" type="application/octet-stream" sparkle:edSignature="AnG7HnSMrgTo2HpvKHz0qD5YK40JVDd6ScF27ofrvAaEgGBigcfk7TXY4oRuOggOUz7YVcB7dAok3HuutrS5Dg=="/>
+        </item>
+        <item>
             <title>0.1.1</title>
             <pubDate>Wed, 01 Jul 2026 01:46:33 +0900</pubDate>
             <link>https://makikub.github.io/simple-editor/</link>

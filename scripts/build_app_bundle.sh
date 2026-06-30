@@ -80,14 +80,14 @@ if [[ "$NOTARIZE" == "1" ]]; then
   fi
 
   NOTARY_ZIP="$ROOT_DIR/.build/dist/SimpleEditor-$VERSION-notary-upload.zip"
-  ditto -c -k --keepParent "$APP_DIR" "$NOTARY_ZIP"
+  ditto -c -k --norsrc --noextattr --noqtn --noacl --keepParent "$APP_DIR" "$NOTARY_ZIP"
   xcrun notarytool submit "$NOTARY_ZIP" --wait --timeout "$NOTARYTOOL_TIMEOUT" "${NOTARYTOOL_ARGS[@]}"
   xcrun stapler staple "$APP_DIR"
   xcrun stapler validate "$APP_DIR"
   rm -f "$NOTARY_ZIP"
 fi
 
-ditto -c -k --keepParent "$APP_DIR" "$ROOT_DIR/.build/dist/SimpleEditor-$VERSION.zip"
+ditto -c -k --norsrc --noextattr --noqtn --noacl --keepParent "$APP_DIR" "$ROOT_DIR/.build/dist/SimpleEditor-$VERSION.zip"
 
 echo "$APP_DIR"
 echo "$ROOT_DIR/.build/dist/SimpleEditor-$VERSION.zip"
