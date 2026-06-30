@@ -40,10 +40,18 @@ make build-release
 ## Distribution
 
 Sparkle is wired for app updates when the executable is packaged as a `.app`.
+The bundled app icon is generated from `scripts/generate_app_icon.swift` and
+stored as `Distribution/AppIcon.icns`.
 
 1. Generate a Sparkle EdDSA key pair with Sparkle's `generate_keys` tool.
 2. Keep the private key outside the repository.
-3. Build the app bundle:
+3. Regenerate the icon if the source script changed:
+
+```sh
+swift scripts/generate_app_icon.swift
+```
+
+4. Build the app bundle:
 
 ```sh
 SPARKLE_PUBLIC_ED_KEY='public-key-from-generate-keys' make app-bundle

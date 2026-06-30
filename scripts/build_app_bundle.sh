@@ -22,11 +22,13 @@ CONTENTS_DIR="$APP_DIR/Contents"
 MACOS_DIR="$CONTENTS_DIR/MacOS"
 FRAMEWORKS_DIR="$CONTENTS_DIR/Frameworks"
 RESOURCES_DIR="$CONTENTS_DIR/Resources"
+APP_ICON="$ROOT_DIR/Distribution/AppIcon.icns"
 
 rm -rf "$APP_DIR"
 mkdir -p "$MACOS_DIR" "$FRAMEWORKS_DIR" "$RESOURCES_DIR"
 
 cp "$BIN_DIR/simple-editor" "$MACOS_DIR/simple-editor"
+cp "$APP_ICON" "$RESOURCES_DIR/AppIcon.icns"
 
 INFO_PLIST="$CONTENTS_DIR/Info.plist"
 sed \
