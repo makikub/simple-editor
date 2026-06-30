@@ -66,6 +66,23 @@ SPARKLE_PUBLIC_ED_KEY='public-key-from-generate-keys' \
 make app-bundle
 ```
 
+For notarization, store credentials outside the repository and enable
+`NOTARIZE=1`. Keychain profiles are preferred because no password appears in the
+command:
+
+```sh
+xcrun notarytool store-credentials simple-editor-notary \
+  --apple-id 'apple-id@example.com' \
+  --team-id 'TEAMID'
+
+CODE_SIGN_IDENTITY='Developer ID Application: Example (TEAMID)' \
+CODE_SIGN_OPTIONS='--options runtime' \
+NOTARIZE=1 \
+NOTARYTOOL_KEYCHAIN_PROFILE='simple-editor-notary' \
+SPARKLE_PUBLIC_ED_KEY='public-key-from-generate-keys' \
+make app-bundle
+```
+
 The default appcast URL is `https://makikub.github.io/simple-editor/appcast.xml`.
 Override it with `SPARKLE_FEED_URL` if GitHub Pages uses another URL.
 The generated app and zip are written to `.build/dist/`.
@@ -104,4 +121,4 @@ Known MVP limitations:
 
 - CSV edited rows are reserialized on save; unedited rows keep their original row text when possible.
 - Fixed-width mode is a safety-oriented preview/check view, not a table editor.
-- Public distribution still needs notarization after Developer ID signing.
+- Public distribution requires `NOTARIZE=1` with valid notarytool credentials.

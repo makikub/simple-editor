@@ -9,6 +9,8 @@ APPCAST_URL="${SPARKLE_FEED_URL:-https://makikub.github.io/simple-editor/appcast
 PUBLIC_KEY="${SPARKLE_PUBLIC_ED_KEY:-}"
 CONFIGURATION="${CONFIGURATION:-release}"
 CODE_SIGN_OPTIONS="${CODE_SIGN_OPTIONS:-}"
+NOTARIZE="${NOTARIZE:-0}"
+NOTARYTOOL_TIMEOUT="${NOTARYTOOL_TIMEOUT:-30m}"
 
 if [[ -z "$PUBLIC_KEY" ]]; then
   echo "SPARKLE_PUBLIC_ED_KEY is required. Generate it with Sparkle's generate_keys tool." >&2
@@ -55,6 +57,35 @@ fi
 CODE_SIGN_ARGS+=(--sign "${CODE_SIGN_IDENTITY:--}" "$APP_DIR")
 
 codesign "${CODE_SIGN_ARGS[@]}"
+
+if [[ "$NOTARIZE" == "1" ]]; then
+  if [[ "${CODE_SIGN_IDENTITY:--}" == "-" ]]; then
+    echo "NOTARIZE=1 requires a Developer ID CODE_SIGN_IDENTITY." >&2
+    exit 2
+  fi
+
+  NOTARYTOOL_ARGS=()
+  if [[ -n "${NOTARYTOOL_KEYCHAIN_PROFILE:-}" ]]; then
+    NOTARYTOOL_ARGS+=(--keychain-profile "$NOTARYTOOL_KEYCHAIN_PROFILE")
+  elif [[ -n "${NOTARYTOOL_KEY:-}" && -n "${NOTARYTOOL_KEY_ID:-}" ]]; then
+    NOTARYTOOL_ARGS+=(--key "$NOTARYTOOL_KEY" --key-id "$NOTARYTOOL_KEY_ID")
+    if [[ -n "${NOTARYTOOL_ISSUER:-}" ]]; then
+      NOTARYTOOL_ARGS+=(--issuer "$NOTARYTOOL_ISSUER")
+    fi
+  elif [[ -n "${NOTARYTOOL_APPLE_ID:-}" && -n "${NOTARYTOOL_PASSWORD:-}" && -n "${NOTARYTOOL_TEAM_ID:-}" ]]; then
+    NOTARYTOOL_ARGS+=(--apple-id "$NOTARYTOOL_APPLE_ID" --password "$NOTARYTOOL_PASSWORD" --team-id "$NOTARYTOOL_TEAM_ID")
+  else
+    echo "NOTARIZE=1 requires NOTARYTOOL_KEYCHAIN_PROFILE, App Store Connect API key variables, or Apple ID variables." >&2
+    exit 2
+  fi
+
+  NOTARY_ZIP="$ROOT_DIR/.build/dist/SimpleEditor-$VERSION-notary-upload.zip"
+  ditto -c -k --keepParent "$APP_DIR" "$NOTARY_ZIP"
+  xcrun notarytool submit "$NOTARY_ZIP" --wait --timeout "$NOTARYTOOL_TIMEOUT" "${NOTARYTOOL_ARGS[@]}"
+  xcrun stapler staple "$APP_DIR"
+  xcrun stapler validate "$APP_DIR"
+  rm -f "$NOTARY_ZIP"
+fi
 
 ditto -c -k --keepParent "$APP_DIR" "$ROOT_DIR/.build/dist/SimpleEditor-$VERSION.zip"
 
