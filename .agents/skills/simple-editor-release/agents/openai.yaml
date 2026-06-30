@@ -1,0 +1,4 @@
+interface:
+  display_name: "Simple Editor Release"
+  short_description: "Release Simple Editor with Sparkle updates"
+  default_prompt: "Use $simple-editor-release to prepare, verify, and stage a Simple Editor Sparkle release."
